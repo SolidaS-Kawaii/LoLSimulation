@@ -1,0 +1,174 @@
+# LoL Draft Simulator - .gitignore
+
+# ==================== PYTHON ====================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.venv
+
+# ==================== DATA FILES ====================
+# Large CSV files (don't commit to git)
+data/*.csv
+data/*.xlsx
+data/*.xls
+data/*.json
+
+# BUT keep a sample or README in data folder
+!data/README.md
+!data/.gitkeep
+
+# ==================== MODEL FILES ====================
+# Large ML model files (don't commit to git)
+models/*.pkl
+models/*.h5
+models/*.pt
+models/*.pth
+models/*.ckpt
+models/*.joblib
+
+# BUT keep model info/metadata
+!models/README.md
+!models/.gitkeep
+!models/model_info.json
+
+# ==================== OUTPUT FILES ====================
+# Generated outputs
+outputs/
+*.log
+*.txt
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+# Keep output structure
+!outputs/.gitkeep
+!outputs/draft_history/.gitkeep
+!outputs/reports/.gitkeep
+
+# ==================== IDE / EDITORS ====================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ==================== OS FILES ====================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ==================== PROJECT SPECIFIC ====================
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+
+# Environment variables (if you use .env)
+.env
+.env.local
+.env.*.local
+
+# ==================== OPTIONAL ====================
+# Uncomment if needed
+
+# Tensorboard logs
+# logs/
+# tensorboard/
+
+# MLflow
+# mlruns/
+
+# Weights & Biases
+# wandb/
+
+# DVC (Data Version Control)
+# .dvc/
+# *.dvc
