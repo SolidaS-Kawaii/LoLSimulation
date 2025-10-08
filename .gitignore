@@ -75,7 +75,7 @@ data/*.json
 !data/.gitkeep
 
 # ==================== MODEL FILES ====================
-# Large ML model files (don't commit to git)
+# Large ML models files (don't commit to git)
 models/*.pkl
 models/*.h5
 models/*.pt
@@ -83,7 +83,7 @@ models/*.pth
 models/*.ckpt
 models/*.joblib
 
-# BUT keep model info/metadata
+# BUT keep models info/metadata
 !models/README.md
 !models/.gitkeep
 !models/model_info.json
