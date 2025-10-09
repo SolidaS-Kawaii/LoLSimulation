@@ -3,18 +3,18 @@ Configuration file for LoL Draft Simulator
 All constants and settings in one place
 """
 
-import os
+from pathlib import Path
 
 # ==================== PATHS ====================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-MODELS_DIR = os.path.join(BASE_DIR, 'models')
-OUTPUTS_DIR = os.path.join(BASE_DIR, 'outputs')
+BASE_DIR = Path(__file__).parent.resolve()
+DATA_DIR = BASE_DIR / 'data'
+MODELS_DIR = BASE_DIR / 'models'
+OUTPUTS_DIR = BASE_DIR / 'outputs'
 
 # Data files
-CHAMPION_STATS_FILE = os.path.join(DATA_DIR, 'champion_stats_by_role_API.csv')
-SYNERGY_DATA_FILE = os.path.join(DATA_DIR, 'champion_synergy_data.csv')
-MATCHUP_DATA_FILE = os.path.join(DATA_DIR, 'champion_matchup_data.csv')
+CHAMPION_STATS_FILE = DATA_DIR / 'champion_stats_by_role_API.csv'
+SYNERGY_DATA_FILE = DATA_DIR / 'champion_synergy_data.csv'
+MATCHUP_DATA_FILE = DATA_DIR / 'champion_matchup_data.csv'
 
 # ==================== DRAFT RULES ====================
 # Ban Phase: 3-3-2-2 format (Pro play)
