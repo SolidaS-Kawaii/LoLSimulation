@@ -94,7 +94,7 @@ AVAILABLE_MODELS = {
     }
 }
 
-DEFAULT_MODEL = 'xgboost'  # LightGBM มีปัญหา ใช้ XGBoost แทน
+DEFAULT_MODEL = 'random_forest'  # LightGBM มีปัญหา ใช้ XGBoost แทน
 
 # Missing value fill for incomplete drafts
 MISSING_VALUE_FILL = 0
