@@ -58,10 +58,10 @@ BAYESIAN_PRIOR_STRENGTH = 20   # Equivalent to 20 games
 # ==================== RECOMMENDATION ====================
 # Weighted scoring for recommendations
 RECOMMENDATION_WEIGHTS = {
-    'win_prob': 0.40,    # 40% weight on win probability
-    'synergy': 0.30,     # 30% weight on team synergy
-    'counter': 0.20,     # 20% weight on counter matchups
-    'meta': 0.10         # 10% weight on meta strength
+    'win_prob': 0.25,    
+    'synergy': 0.20,     
+    'counter': 0.15,     
+    'meta': 0.40         # เพิ่มเป็น 40% ⬆️⬆️
 }
 
 TOP_N_RECOMMENDATIONS = 5
@@ -94,7 +94,7 @@ AVAILABLE_MODELS = {
     }
 }
 
-DEFAULT_MODEL = 'lightgbm'
+DEFAULT_MODEL = 'xgboost'  # LightGBM มีปัญหา ใช้ XGBoost แทน
 
 # Missing value fill for incomplete drafts
 MISSING_VALUE_FILL = 0
