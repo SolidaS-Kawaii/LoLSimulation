@@ -95,36 +95,48 @@ class ModelManager:
             )
         
         return self.models[model_name]
-    
+
     def predict(self, features: np.ndarray, model_name: str = None) -> float:
         """
         Predict win probability using specified model
-        
+
         Args:
             features: Feature vector (129 features)
             model_name: Which model to use (default: from config)
-        
+
         Returns:
             Win probability (0.0-1.0)
         """
         model = self.get_model(model_name)
-        
-        # Ensure features is 2D array (required by sklearn models)
+
+        # Validate model type
+        if isinstance(model, np.ndarray):
+            print(f"[ERROR] Model '{model_name}' is corrupted (numpy.ndarray instead of model)")
+            return 0.5  # Neutral fallback
+
+        # Validate model has required method
+        if not hasattr(model, 'predict_proba'):
+            print(f"[ERROR] Model '{model_name}' doesn't have predict_proba (type: {type(model)})")
+            return 0.5  # Neutral fallback
+
+        # Ensure features is 2D array
         if features.ndim == 1:
             features = features.reshape(1, -1)
-        
-        # Handle LightGBM booster specifically
-        if model_name == 'lightgbm' and hasattr(model, '_Booster'):
-            # Use booster's predict method
-            prediction = model._Booster.predict(features)[0]
-            # prediction is already probability for binary classification
-            return float(prediction)
-        else:
-            # Standard sklearn API
-            prediction = model.predict_proba(features)[0]
-            # Return probability of winning (class 1)
-            win_probability = prediction[1]
-            return float(win_probability)
+
+        try:
+            # Handle LightGBM booster specifically
+            if model_name == 'lightgbm' and hasattr(model, '_Booster'):
+                prediction = model._Booster.predict(features)[0]
+                return float(prediction)
+            else:
+                # Standard sklearn API
+                prediction = model.predict_proba(features)[0]
+                win_probability = prediction[1]
+                return float(win_probability)
+
+        except Exception as e:
+            print(f"[ERROR] Prediction failed: {e}")
+            return 0.5  # Neutral fallback
     
     def list_available_models(self) -> List[Dict]:
         """

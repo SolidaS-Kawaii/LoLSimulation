@@ -50,7 +50,8 @@ class TerminalUI:
         # Settings
         self.model_name = config.DEFAULT_MODEL
         self.auto_play_speed = 1.5  # seconds per AI turn in AI vs AI mode
-    
+        self.turn_counter = 0  # Track turn number for separator display
+
     def run(self):
         """Main entry point"""
         try:
@@ -160,7 +161,23 @@ class TerminalUI:
             import traceback
             traceback.print_exc()
             return False
-    
+
+    def _refresh_display(self, turn_number: Optional[int] = None, phase: Optional[str] = None):
+        """
+        Refresh display based on UI_CLEAR_MODE setting
+
+        This method provides flexibility to switch between clear screen
+        and separator modes without changing the rest of the code.
+
+        Args:
+            turn_number: Current turn number (for separator mode)
+            phase: Current phase name (for separator mode)
+        """
+        if config.UI_CLEAR_MODE == 'clear':
+            self.display.clear_screen()
+        else:  # separator mode
+            self.display.print_separator(turn_number, phase)
+
     def _select_mode(self) -> str:
         """Select game mode"""
         self.display.clear_screen()
@@ -248,18 +265,26 @@ class TerminalUI:
                 return 'red'
             else:
                 self.display.print_error("Invalid choice. Please select B or R.")
-    
+
     def _run_interactive_game(self):
         """Run interactive game (User vs AI or User vs User)"""
         self.display.clear_screen()
         self.display.print_header("DRAFT PHASE STARTED", '═')
         time.sleep(1)
-        
+
+        self.turn_counter = 0  # Reset turn counter
+
         while not self.controller.is_complete():
-            # Display current state
-            self.display.clear_screen()
+            self.turn_counter += 1
+
+            # Get current phase for display
+            turn_info = self.controller.engine.get_turn_info()
+            phase_name = turn_info.get('phase', '').replace('_', ' ').upper()
+
+            # Display current state with separator (or clear based on config)
+            self._refresh_display(self.turn_counter, phase_name)
             self.display.print_draft_state(self.controller.engine, self.champion_db)
-            
+
             # Check whose turn
             if self.controller.is_user_turn():
                 self._handle_user_turn()
@@ -271,13 +296,15 @@ class TerminalUI:
         # Show turn info
         turn_info = self.controller.engine.get_turn_info()
         self.display.print_turn_info(turn_info)
-        
-        # Show recommendations for pick phase
+
         if turn_info['action'] == 'pick':
             recommendations = self.controller.get_recommendations()
             if recommendations:
                 print()  # Blank line
                 self.display.print_recommendations(recommendations)
+
+                    # Pause to let user read recommendations
+                self.display.print_pause()
         
         # Show commands
         self.display.print_commands()
@@ -436,7 +463,7 @@ class TerminalUI:
                 self.display.print_success(f"AI {action_str}: {champ_str}")
             
             time.sleep(1.5)
-    
+
     def _run_ai_vs_ai(self):
         """Run AI vs AI demo mode"""
         self.display.clear_screen()
@@ -444,37 +471,40 @@ class TerminalUI:
         self.display.print_info("Watch the AI draft against itself!")
         self.display.print_info(f"Auto-play speed: {self.auto_play_speed}s per turn")
         input("\nPress Enter to start...")
-        
-        turn_count = 0
-        
+
+        self.turn_counter = 0  # Reset turn counter
+
         while not self.controller.is_complete():
-            turn_count += 1
-            
-            # Display state
-            self.display.clear_screen()
-            self.display.print_draft_state(self.controller.engine, self.champion_db)
-            
-            # Show turn
+            self.turn_counter += 1
+
+            # Get current phase for display
             turn_info = self.controller.engine.get_turn_info()
+            phase_name = turn_info.get('phase', '').replace('_', ' ').upper()
+
+            # Display state with separator (or clear based on config)
+            self._refresh_display(self.turn_counter, phase_name)
+            self.display.print_draft_state(self.controller.engine, self.champion_db)
+
+            # Show turn
             self.display.print_turn_info(turn_info)
-            
+
             # AI takes turn
-            print(f"\nTurn {turn_count}: AI is thinking...")
+            print(f"\nTurn {self.turn_counter}: AI is thinking...")
             time.sleep(self.auto_play_speed)
-            
+
             ai_action = self.controller.execute_ai_turn()
-            
+
             if ai_action:
                 action_str = ai_action['action'].upper()
                 champ_str = ai_action['champion_name']
                 side_str = ai_action['side'].upper()
-                
+
                 if ai_action['action'] == 'pick':
                     role_str = ai_action['role']
                     self.display.print_success(f"{side_str} AI {action_str}: {champ_str} ({role_str})")
                 else:
                     self.display.print_success(f"{side_str} AI {action_str}: {champ_str}")
-                
+
                 time.sleep(self.auto_play_speed * 0.5)
     
     def _show_results(self):

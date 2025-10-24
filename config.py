@@ -52,16 +52,16 @@ ROLE_ENCODING = {
 MIN_GAMES_THRESHOLD = 20
 
 # Bayesian smoothing parameters
-BAYESIAN_PRIOR_MEAN = 0.5      # 50% baseline win rate
+BAYESIAN_PRIOR_MEAN = 0.45      # 50% baseline win rate
 BAYESIAN_PRIOR_STRENGTH = 20   # Equivalent to 20 games
 
 # ==================== RECOMMENDATION ====================
 # Weighted scoring for recommendations
 RECOMMENDATION_WEIGHTS = {
-    'win_prob': 0.25,    
+    'win_prob': 0.20,
     'synergy': 0.20,     
     'counter': 0.15,     
-    'meta': 0.40         # เพิ่มเป็น 40% ⬆️⬆️
+    'meta': 0.45         # เพิ่มเป็น 40% ⬆️⬆️
 }
 
 TOP_N_RECOMMENDATIONS = 5
@@ -73,6 +73,19 @@ FUZZY_MATCH_THRESHOLD = 0.8
 # Display settings
 USE_COLOR = True
 MAX_DISPLAY_WIDTH = 70
+
+# UI Display Mode
+# - 'separator': Show separator between turns (recommended - allows scrolling history)
+# - 'clear': Clear screen every turn (legacy mode)
+UI_CLEAR_MODE = 'separator'
+
+# Pause after showing recommendations
+# Gives user time to read before input prompt
+PAUSE_AFTER_RECOMMENDATIONS = True
+
+# Separator style for UI_CLEAR_MODE = 'separator'
+SEPARATOR_CHAR = '═'
+SEPARATOR_LENGTH = 70
 
 # ==================== MODEL ====================
 # Available models

@@ -62,6 +62,52 @@ class Display:
     def clear_screen(self):
         """Clear terminal screen"""
         os.system('cls' if os.name == 'nt' else 'clear')
+
+    def print_separator(self, turn_number: Optional[int] = None, phase: Optional[str] = None):
+        """
+        Print separator line instead of clearing screen
+
+        Args:
+            turn_number: Current turn number (optional)
+            phase: Current phase name (optional)
+        """
+        separator = config.SEPARATOR_CHAR * config.SEPARATOR_LENGTH
+
+        print(f"\n{self.color(separator, 'highlight')}")
+
+        if turn_number is not None:
+            title = f"TURN {turn_number}"
+            if phase:
+                title += f" - {phase}"
+
+            # Center the title
+            padding = (config.SEPARATOR_LENGTH - len(title)) // 2
+            print(" " * padding + self.color(title, 'highlight'))
+
+        print(self.color(separator, 'highlight') + "\n")
+
+    def print_pause(self, message: Optional[str] = None):
+        """
+        Pause and wait for user to press Enter
+        Useful for giving time to read recommendations
+
+        Args:
+            message: Custom pause message (optional)
+        """
+        if not config.PAUSE_AFTER_RECOMMENDATIONS:
+            return
+
+        if message is None:
+            message = "\n📖 Take your time to review the recommendations..."
+
+        print(self.color(message, 'muted'))
+        print(self.color("Press Enter when ready to continue... ⏸️", 'info'))
+
+        try:
+            input()
+        except KeyboardInterrupt:
+            print("\n")
+            raise
     
     def print_header(self, text: str, char: str = '='):
         """Print fancy header box"""
